@@ -6,7 +6,7 @@ namespace adventofcode2017
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Day9.Solve());
+            Console.WriteLine(Day12.Solve());
         }
 
 
