@@ -60,9 +60,37 @@ namespace adventofcode2017 {
             return lst[0] * lst[1];
         }
 
+        public static string Hash(string input) {
+
+            IEnumerable<int> lengthsAtEnd = new[] {17, 31, 73, 47, 23};
+
+            var codes = input.Select(c => (int)c)
+                .Concat(lengthsAtEnd).ToArray();
+
+            var lst = new CircularList(MakeBuffer());
+            var startPos = 0;
+            var skipSize = 0;
+
+            for (var i = 0; i < 64; i++) {
+                foreach (var c in codes) {
+                    lst.Reverse(startPos, startPos+(c-1));
+                    startPos += c;
+                    startPos += skipSize++;
+                }
+            }
+
+            var dense = new byte[16];
+            for (var i = 0; i < 256; i++) {
+                dense[i / 16] ^= (byte)lst[i];
+            }
+
+            return string.Join("", dense.Select(b => b.ToString("x")));
+        }
+
         public static string Solve() {
             // return Run(new[] {3,4,1,5}).ToString();
-            return Run(ReadInput()).ToString();
+            return Run(ReadInput()).ToString() + Environment.NewLine +
+                Hash(File.ReadAllText(@"input\day10.txt").Trim()).ToString();
         }
 
     }
